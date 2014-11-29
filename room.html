@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+ 	<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+	<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	<link href="css/room.css" rel="stylesheet" type="text/css">
+	<!-- PEER.JS + ACE -->
+	<script src="http://cdn.peerjs.com/0.3/peer.js"></script>
+	<script src="http://d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="js/peer_edit.js" type="text/javascript" charset="utf-8"></script>
+
+	<!-- ACE EDITOR STYLING -->
+	<style type="text/css" media="screen">
+	    #editor { 
+	        position: relative;
+	        top: 0;
+	        right: 0;
+	        bottom: 0;
+	        left: 0;
+	    }
+	    /*	Styles for video boxes */
+	    #my-video, #their-video{
+			width: 45%;
+ 			height: auto;
+  			background-color: #eee;
+		}
+		#rid {
+			margin-bottom: 10px;
+		}
+
+		#pid {
+			margin-left: 5px;
+		}
+		#connect, #end-call {
+			width: 100px;
+		}
+		#utility {
+			margin-top: 10px;
+		}
+	</style>
+
+	<!-- PEER JS VIDEO CHAT 
+  	<script type="text/javascript" src="http://cdn.peerjs.com/0.3/peer.js"></script>
+	<script type="text/javascript" src="js/peer_vid.js"></script> -->
+</head>
+
+<!-- NAVBAR -->
+<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+	<div class="row">
+		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		  <div class="container">
+		    <div class="navbar-header page-scroll">
+		      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+		      <a class="navbar-brand" href="index.html">ProjectName</a> </div>
+		    
+		    <!-- Collect the nav links, forms, and other content for toggling -->
+		    <div class="collapse navbar-collapse navbar-ex1-collapse">
+		      <ul class="nav navbar-nav">
+		        <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+		        <li class="hidden"> <a href="#page-top"><i class="fa fa-arrow-up"></i></a> </li>
+		        <li class="page-scroll"> <a href="/path/to/saved/file" onclick="downloadCode()" download='code.txt'>Download Code</a> </li>
+		        <li class="page-scroll"> <a href="profile.html">Profile</a> </li>
+		        <li class="page-scroll"> <a href="#">Logout</a> </li>
+		      </ul>
+		    </div>
+		    <!-- /.navbar-collapse --> 
+		  </div>
+		  <!-- /.container --> 
+		</nav>
+	</div>
+<!-- END NAVBAR -->
+
+<!-- MAIN CONTAINER -->
+	<div class="container-fluid editor-content" id="editor-container">
+	<div class="row">
+		<!-- ACE EDITOR  -->
+			<div class="col-md-7">
+			<!-- THEME AND LANGUAGE SELECTS -->
+			<div id="selects">
+				Select theme
+				  <select id="myList" onchange="favBrowser()">
+				    <option>monokai</option>
+					<option>ambiance</option>
+					<option>chaos</option>
+					<option>chrome</option>
+					<option>clouds</option>
+					<option>cobalt</option>
+					<option>dawn</option>
+					<option>dreamweaver</option>
+					<option>eclipse</option>
+					<option>github</option>
+					<option>kr</option>
+					<option>merbivore</option>
+					<option>textmate</option>  
+					<option>tomorrow</option>
+					<option>twilight</option>
+					<option>xcode</option>
+				  </select>
+					
+				Select language
+				  <select id="myList2" onchange="favBrowser2()">
+					<option>javascript</option>
+					<option>python</option>
+					<option>coffee</option>
+					<option>csharp</option>
+					<option>css</option>
+					<option>curly</option>
+					<option>django</option>
+					<option>html</option>
+					<option>java</option>
+					<option>json</option>
+					<option>jsp</option>
+					<option>lisp</option>
+					<option>php</option>  
+					<option>ruby</option>
+					<option>sql</option>
+					<option>xml</option>
+				  </select>
+			</div>
+			<!-- ACE EDITOR -->
+			<div id="editor">function foo(items) {
+					var x = "All this is syntax highlighted";
+				return x;
+				}
+			</div>
+		</div>
+		<!-- RIGHT SIDE -->
+		<div class="col-md-5" id="video-container">
+			<video id="their-video" autoplay></video>
+        	<video id="my-video" muted="true" autoplay></video>
+			<!--  UTILITY SECTION -->
+			<div class ="col-md-12" id="utility">
+				<!-- ROOM INFO -->
+				<form>
+					<div id="room-info">
+						<label>Your ID:</label><span id='pid'></span><br/>
+						<label>Room members:</label><input type="text" disabled="disabled" id="roomMembers" value="temp1, temp2"/><br/>
+						<input type='button' class="btn btn-default btn-outline-light" id="connect" value="Connect">
+						<input type='text' placeholder="Friends user id" id='rid'><br />
+						<a href="#" class="btn btn-default btn-outline-light" id="end-call">Disconnect</a>
+					</div>
+					<br/>
+					<button type="button" class="btn btn-default btn-outline-light" id="hideButton">Hide</button>
+					<button type="button" class="btn btn-default btn-outline-light" id="showButton">Show</button>
+				</form>
+				<br/>
+				<!-- FILE UPLOAD -->
+				<div class="drag-container">
+					<div id="dd-files">
+						Drop your code file into this box to upload to the editor!
+					</div>
+
+			<div id="file-content" style="width: 0; height: 0; overflow-y: scroll;"></div>
+				</div>
+
+			</div>
+			<!-- END UTILITY SECTION -->
+		</div>
+		<!-- END RIGHT SIDE -->
+	</div>
+	</div> 
+<!-- END MAIN CONTAINER -->
+
+<!-- ace instantiation -->
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.getSession().setMode("ace/mode/javascript");
+</script>
+<!-- drag-n-drop file reading -->
+<script src="js/DragNDrop.js" type="text/javascript" charset="utf-8"></script>
+<!-- jQuery for showing/hiding buttons -->
+<script type="text/javascript">
+	$(function() {
+		$("#hideButton").click(function() {
+	        $( "#room-info" ).hide( "slow" );
+	    });
+	    $("#showButton").click(function() {
+	        $( "#room-info" ).show( "slow" );
+	    });
+	});
+</script>
+
+</body>
+</html>
