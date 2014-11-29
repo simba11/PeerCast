@@ -5,6 +5,6 @@ Web-based code editor built using open source technology. Allows users to code c
 
 Only the front-end was added to this repo as that was the part of the project I was responsible for.
 
-Live demo site coming soon.
+Live demo site coming soon. Poster also created by myself for project demo.
 
 ![alt tag](https://github.com/simba11/PeerCast/blob/master/poster.png)
